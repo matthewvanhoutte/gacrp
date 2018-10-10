@@ -36,7 +36,7 @@ For each *fullVisitorId* in the test set, you must predict the natural log of th
 All deadlines are at 11:59 PM UTC on the corresponding day unless otherwise noted. The competition organizers reserve the right to update the contest timeline if they deem it necessary.
 
 ### Data:
-The data can be downloaded from [&lt;Kaggle&gt;](https://www.kaggle.com/c/10038/download-all).
+The data can be downloaded from [here](https://www.kaggle.com/c/10038/download-all).
 
 ### Code:
 All code will be captured here and a description of the different scripts can be found in the table below.
