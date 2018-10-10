@@ -41,5 +41,5 @@ The data can be downloaded from [here](https://www.kaggle.com/c/10038/download-a
 ### Code:
 All code will be captured here and a description of the different scripts can be found in the table below.
 
-|Script|Version|Description|
-|------|-------|-----------|
+|Script|Description|
+|------|-----------|
