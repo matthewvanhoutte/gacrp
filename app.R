@@ -4,32 +4,90 @@
 #Required Libraries
 library(data.table)
 library(shiny)
+library(ggplot2)
 
-#Any data prep required for shiny application
+# Any data prep required for shiny application ----
 tr_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/tr.csv"
 te_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/te.csv"
 tr <- fread(file = tr_name, data.table = FALSE, stringsAsFactors = FALSE)
 te <- fread(file = te_name, data.table = FALSE, stringsAsFactors = FALSE)
 
+# Subsetting the data
+index <- sample(1:nrow(tr), 10000, replace = FALSE)
+tr <- tr[index,]
+te <- te[index,]
 
-#Generation of user interface
+# Converting the date columns into date format
+tr$date <- as.Date(as.character(tr$date), "%Y%m%d")
+te$date <- as.Date(as.character(te$date), "%Y%m%d")
+
+# Converting the columns to factors
+
+#Define variables required in the UI ----
+hist_names <- lapply(tr, class)
+hist_names <- hist_names[hist_names == "integer"]
+hist_names <- unlist(names(hist_names))
+
+
+# Define UI for app ----
 ui <- fluidPage(
+  
+  # Title panel for shiny
   titlePanel("Data Exploration"),
-  mainPanel(
-    tabsetPanel(
-      tabPanel("Data",
-        dataTableOutput("data")
+  tabsetPanel(
+    
+    # App layout for Data tables ----
+    tabPanel("Data",
+      tabsetPanel(
+        tabPanel("Train Data", dataTableOutput("tr")),
+        tabPanel("Test Data", dataTableOutput("te"))
+      )
+    ),
+    
+    # App layout for graphs ----
+    tabPanel("Graphs",
+      tabsetPanel(
+        
+        # Histograms ----
+        tabPanel(
+          "Histograms",
+          sidebarLayout(
+            sidebarPanel(
+              selectInput("hist_var", 
+                          "Histogram Variable:",
+                          hist_names),
+              sliderInput("bin_num",
+                          "Bin Number",
+                          min = 1,
+                          max = 200,
+                          value = 30)
+            ),
+            mainPanel(
+              plotOutput("hist"))
+          )
+
+        ),
+        tabPanel("Scatter", plotOutput("scat"))
       )
     )
   )
 )
 
 
-#Server Function
+# Server Function ----
 server <- function(input, output, session){
-  output$data <- renderDataTable(head(tr))
+  
+  #Produce Tables of data ----
+  output$tr <- renderDataTable(tr)
+  output$te <- renderDataTable(te)
+  
+  #Produce Graphs of data ----
+  output$hist <- renderPlot({
+    ggplot(te) + geom_histogram(aes_string(input$hist_var), bins = input$bin_num)
+  })
+  
 }
 
-#Run the shiny app
+# Run the shiny app ----
 shinyApp(ui = ui, server = server)
   
