@@ -11,3 +11,4 @@ setwd("~/Documents/Github/garcp")
 train <- fread(file = "~/Documents/Kaggle Comp/train.csv", data.table = FALSE, stringsAsFactors = FALSE)
 test <- fread(file = "~/Documents/Kaggle Comp/test.csv", data.table = FALSE, stringsAsFactors = FALSE)
 
+test
