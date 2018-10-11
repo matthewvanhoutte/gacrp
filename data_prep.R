@@ -10,7 +10,7 @@ library(tidyverse)
 # Initialise --------------------------------------------------------------
 
 #Setting working directory to where the Github folder is located
-setwd("~/Documents/Github/garcp")
+#setwd("~/Documents/Github/garcp")
 
 #Import the data
 tr_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/train.csv"
