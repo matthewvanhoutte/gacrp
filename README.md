@@ -43,4 +43,4 @@ All code will be captured here and a description of the different scripts can be
 
 |Script|Description|
 |------|-----------|
-|||
+|data_prep.R|This file contains the necessary code to preprocess the raw data. The code focuses on converting both the training and test set information from a JSON into new variables with the respective strings|
