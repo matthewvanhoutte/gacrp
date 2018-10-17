@@ -11,10 +11,13 @@ library(tidyverse)
 
 #Setting working directory to where the Github folder is located
 #setwd("~/Documents/Github/garcp")
+setwd("C://Users//user1//Documents//Kaggle")
 
 #Import the data
-tr_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/train.csv"
-te_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/test.csv"
+#tr_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/train.csv"
+#te_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/test.csv"
+tr_name <- "train.csv"
+te_name <- "test.csv"
 tr <- read.csv(tr_name)
 te <- read.csv(te_name)
 
