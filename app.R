@@ -7,15 +7,18 @@ library(shiny)
 library(ggplot2)
 
 # Any data prep required for shiny application ----
-tr_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/tr.csv"
-te_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/te.csv"
-tr <- fread(file = tr_name, data.table = FALSE, stringsAsFactors = FALSE)
-te <- fread(file = te_name, data.table = FALSE, stringsAsFactors = FALSE)
+setwd("C://Users//user1//Documents//Kaggle")
+#tr_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/tr.csv"
+#te_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/te.csv"
+tr_name <- "tr.csv"
+te_name <- "te.csv"
+tr_total <- fread(file = tr_name, data.table = FALSE, stringsAsFactors = FALSE)
+te_total <- fread(file = te_name, data.table = FALSE, stringsAsFactors = FALSE)
 
 # Subsetting the data
 index <- sample(1:nrow(tr), 10000, replace = FALSE)
-tr <- tr[index,]
-te <- te[index,]
+tr <- tr_total[index,]
+te <- te_total[index,]
 
 # Converting the date columns into date format
 tr$date <- as.Date(as.character(tr$date), "%Y%m%d")
