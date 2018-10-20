@@ -14,8 +14,8 @@ library(tidyverse)
 setwd("C://Users//user1//Documents//Kaggle")
 
 #Import the data
-#tr_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/train.csv"
-#te_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/test.csv"
+#tr_name <- "D~/Documents/Kaggle Comp/train.csv"
+#te_name <- "~/Documents/Kaggle Comp/test.csv"
 tr_name <- "train.csv"
 te_name <- "test.csv"
 tr <- read.csv(tr_name)
