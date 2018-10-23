@@ -11,7 +11,7 @@ duplicats <- te[te$fullVisitorId %in% x$Var1,]
 x <- unique(tr$fullVisitorId)
 test
 
-# Creating table of unique values ----
+# Creating table of unique values - Task 2 ----
 # Functions
 uniqueTable <- function (data){
   data <- data.frame(
