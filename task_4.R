@@ -20,4 +20,11 @@ tr$month <- as.factor(substr(tr$date,5,6))
 # Years
 tr$year <- as.factor(substr(tr$date,1,4))
 
-# Processing "
+# Processing "fullVisitorId" ----
+# This column is to be obtained from the sessionId 
+# as it has not been stored correctly in the csv
+tr$sessionId <- as.character(tr$sessionId)
+test <- strsplit(tr$sessionId, "_")
+test <- unlist(test)
+test <- str_split(tr$sessionId, "_")
+test <- as.data.frame(test)
