@@ -7,7 +7,7 @@ library(data.table)
 # Importing the required file ----
 setwd("C://Users//user1//Documents//Kaggle")
 tr_name <- "tr.csv"
-#tr_name <- "~/Documents/Kaggle Comp/tr.csv"
+#tr_name <- "~/OneNote/Kaggle Comp/tr.csv"
 tr <- fread(file = tr_name, stringsAsFactors = FALSE, data.table =  FALSE)
 print(colnames(tr))
 
@@ -18,6 +18,16 @@ replace <- function(x, col_list, str_replace){
   } else {
     return(str_replace)
   }
+}
+
+binning <- function(data, num_bin){
+  bin <- 1440/num_bin
+  hrs <- hour(data)
+  mins <- minute(data)
+  total_min <- hrs * 60 + mins
+  output <- ceiling(total_min/bin)
+  output <- ifelse(output==0, 1, output)
+  return (output)
 }
 
 # Processing "channelGrouping" ----
@@ -47,6 +57,9 @@ tr$socialEngagementType <- NULL
 tr$visitNumber <- as.integer(tr$visitNumber)
 
 # Processing visitStartTime ----
+tr$visitStartTime <- as.POSIXct(tr$visitStartTime, origin = "1970-01-01", tz = "America/Los_Angeles")
+tr$visitTimeBin12 <- binning(tr$visitStartTime, 12)
+
 # Processing browser ----
 #x <- data.frame(table(tr$browser))
 #x <- x[order(x$Freq),]
