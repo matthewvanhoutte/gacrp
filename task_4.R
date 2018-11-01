@@ -7,7 +7,7 @@ library(data.table)
 # Importing the required file ----
 setwd("C://Users//user1//Documents//Kaggle")
 tr_name <- "tr.csv"
-#tr_name <- "~/OneNote/Kaggle Comp/tr.csv"
+#tr_name <- "~/OneDrive/Kaggle Comp/tr.csv"
 tr <- fread(file = tr_name, stringsAsFactors = FALSE, data.table =  FALSE)
 print(colnames(tr))
 
@@ -47,7 +47,7 @@ tr$year <- as.factor(substr(tr$date,1,4))
 tr$sessionId <- as.character(tr$sessionId)
 tr$fullVisitorId <- sapply(tr$sessionId, function(x) toString(unlist(strsplit(x, "_"))[1]))
 tr$fullVisitId <- sapply(tr$sessionId, function(x) toString(unlist(strsplit(x, "_"))[2]))
-tr$sessionId <- NULL
+#tr$sessionId <- NULL
 
 # Processing socialEngagementType ----
 tr$socialEngagementType <- as.factor(tr$socialEngagementType)
@@ -265,4 +265,8 @@ tr$bounces <- NULL
 # Processing newvisits
 tr$newVisits <- as.integer(tr$newVisits)
 tr$newVisits <- NULL
+
+# Processing transactionRevenue - Only required in Training Data set ----
+tr$transactionRevenue <- as.double(tr$transactionRevenue)
+tr$transactionRevenue <- ifelse(is.na(test),0,test)
 
