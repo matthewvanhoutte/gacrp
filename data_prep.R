@@ -53,11 +53,4 @@ tr <- as.data.frame(tr)
 te <- as.data.frame(te)
 
 
-# Task 3 - Concatenate on SessionID ---------------------------------------
-# Required Libraries for Task:
-# library(data.table)
-# library(dplyr)
-
-tr <- tr %>% group_by(sessionId)
-
 
