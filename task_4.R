@@ -268,5 +268,5 @@ tr$newVisits <- NULL
 
 # Processing transactionRevenue - Only required in Training Data set ----
 tr$transactionRevenue <- as.double(tr$transactionRevenue)
-tr$transactionRevenue <- ifelse(is.na(test),0,test)
+tr$transactionRevenue <- ifelse(is.na(tr$transactionRevenue),0,tr$transactionRevenue)
 
