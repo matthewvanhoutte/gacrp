@@ -8,8 +8,6 @@ library(ggplot2)
 
 # Any data prep required for shiny application ----
 setwd("C://Users//user1//Documents//Kaggle")
-#tr_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/tr.csv"
-#te_name <- "D:/Users/matthew.vanhoutte2/Documents/Kaggle Comp/te.csv"
 tr_name <- "tr.csv"
 te_name <- "te.csv"
 tr_total <- fread(file = tr_name, data.table = FALSE, stringsAsFactors = FALSE)
