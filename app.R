@@ -13,20 +13,24 @@ te_name <- "te.csv"
 tr_total <- fread(file = tr_name, data.table = FALSE, stringsAsFactors = FALSE)
 te_total <- fread(file = te_name, data.table = FALSE, stringsAsFactors = FALSE)
 
-# Subsetting the data
+# Subsetting the data - Only required if dataset is large
+# If running Task 4 to do the data prep then there should
+# only be 22 features, subsetting is not required
 index <- sample(1:nrow(tr), 10000, replace = FALSE)
 tr <- tr_total[index,]
 te <- te_total[index,]
 
-# Converting the date columns into date format
+# Converting the date columns into date format - best
+# use Task 4 code which does the data cleansing
 tr$date <- as.Date(as.character(tr$date), "%Y%m%d")
 te$date <- as.Date(as.character(te$date), "%Y%m%d")
 
-# Converting the columns to factors
-
 #Define variables required in the UI ----
 hist_names <- lapply(tr, class)
-hist_names <- hist_names[hist_names == "integer"]
+hist_names <- hist_names[hist_names == "integer"
+                         | hist_names == "factor"
+                         | hist_names == "numeric"]
+hist_graph <- hist_names
 hist_names <- unlist(names(hist_names))
 
 
@@ -80,11 +84,14 @@ server <- function(input, output, session){
   
   #Produce Tables of data ----
   output$tr <- renderDataTable(tr)
-  output$te <- renderDataTable(te)
   
   #Produce Graphs of data ----
   output$hist <- renderPlot({
-    ggplot(te) + geom_histogram(aes_string(input$hist_var), bins = input$bin_num)
+    if (hist_graph[[input$hist_var]] == "factor"){
+      ggplot(tr) + geom_histogram(aes_string(input$hist_var), bins = input$bin_num, stat = "count")
+    } else {
+      ggplot(tr) + geom_histogram(aes_string(input$hist_var), bins = input$bin_num)
+    }
   })
   
 }

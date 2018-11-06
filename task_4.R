@@ -59,6 +59,7 @@ tr$visitNumber <- as.integer(tr$visitNumber)
 # Processing visitStartTime ----
 tr$visitStartTime <- as.POSIXct(tr$visitStartTime, origin = "1970-01-01", tz = "America/Los_Angeles")
 tr$visitTimeBin12 <- binning(tr$visitStartTime, 12)
+tr$visitTimeBin12 <- as.factor(tr$visitTimeBin12)
 
 # Processing browser ----
 #x <- data.frame(table(tr$browser))
