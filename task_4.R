@@ -148,6 +148,7 @@ continent_replace <- function(x, sub_list){
   }
 }
 tr$subContinent <- apply(tr[,c("continent", "subContinent")],1,continent_replace, sub_list = sub_list)
+tr$subContinent <- as.factor(tr$subContinent)
 tr$continent <- NULL
 
 # Processing country ----
