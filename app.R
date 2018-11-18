@@ -4,6 +4,7 @@
 #Required Libraries
 library(data.table)
 library(shiny)
+library(shinyjs)
 library(ggplot2)
 
 # Any data prep required for shiny application ----
@@ -47,6 +48,8 @@ scat_names <- unlist(names(scat_names))
 
 # Define UI for app ----
 ui <- fluidPage(# Title panel for shiny
+  useShinyjs(),
+  
   titlePanel("Data Exploration"),
   tabsetPanel(
     # App layout for Data tables ----
@@ -91,6 +94,12 @@ ui <- fluidPage(# Title panel for shiny
                             selectInput("var_y",
                                         "Variable Y Axis",
                                         scat_names),
+                            checkboxInput("colour",
+                                          "Colour Graph?",
+                                          FALSE),
+                            selectInput("scat_col",
+                                        "Colour Transaction points",
+                                        scat_names),
                             radioButtons("filter",
                                          "Filter by transactionRevenue",
                                          choices = filter_label)
@@ -102,12 +111,14 @@ ui <- fluidPage(# Title panel for shiny
 # Server Function ----
 server <- function(input, output, session){
   
+  observeEvent(input$colour, {
+    show("scat_col")
+  })
+
   #Produce Tables of data ----
   output$tr <- renderDataTable(tr)
   
-  
-  
-# Produce Graphs of data ----
+# Produce Graphs of data
   # Producing Histogram graphs ----
   output$hist <- renderPlot({
     if (hist_graph[[input$hist_var]] == "factor"){
@@ -132,7 +143,23 @@ server <- function(input, output, session){
   
   # Producing Scatter plots ----
   output$scat <- renderPlot({
-    ggplot(tr) + geom_point(aes_string(input$var_x, input$var_y))
+    if (input$colour) {
+      if (input$filter == "Both") {
+        ggplot(tr) + geom_point(aes_string(input$var_x, input$var_y), color = input$scat_col)
+      } else if (input$filter == "No Transaction") {
+        ggplot(tr[!tr$hasTransaction,]) + geom_point(aes_string(input$var_x, input$var_y), color = input$scat_col)
+      } else if (input$filter == "Transaction") {
+        ggplot(tr[tr$hasTransaction,]) + geom_point(aes_string(input$var_x, input$var_y), color = input$scat_col)
+      }
+    } else {
+      if (input$filter == "Both") {
+        ggplot(tr) + geom_point(aes_string(input$var_x, input$var_y))
+      } else if (input$filter == "No Transaction") {
+        ggplot(tr[!tr$hasTransaction,]) + geom_point(aes_string(input$var_x, input$var_y))
+      } else if (input$filter == "Transaction") {
+        ggplot(tr[tr$hasTransaction,]) + geom_point(aes_string(input$var_x, input$var_y))
+      }
+    }
   })
   
 }
