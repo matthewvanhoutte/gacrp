@@ -51,7 +51,6 @@ tr$fullVisitId <- sapply(tr$sessionId, function(x) toString(unlist(strsplit(x, "
 
 # Processing socialEngagementType ----
 tr$socialEngagementType <- as.factor(tr$socialEngagementType)
-tr$socialEngagementType <- NULL
 
 # Processing visitNnumber ----
 tr$visitNumber <- as.integer(tr$visitNumber)
@@ -70,11 +69,9 @@ tr$browser <- as.factor(tr$browser)
 
 # Processing browserVersion ----
 tr$browserVersion <- as.factor(tr$browserVersion)
-tr$browserVersion <- NULL
 
 # Processing browserSize ----
 tr$browserSize <- as.factor(tr$browserSize)
-tr$browserSize <- NULL
 
 # Processing operatingSystem ----
 #x <- data.frame(table(tr$operatingSystem))
@@ -85,47 +82,36 @@ tr$operatingSystem <- as.factor(tr$operatingSystem)
 
 # Processing operatingSystemVersion ----
 tr$operatingSystemVersion <- as.factor(tr$operatingSystemVersion)
-tr$operatingSystemVersion <- NULL
 
 # Processing isMobile ----
 tr$isMobile <- as.integer(1*tr$isMobile)
-tr$isMobile <- NULL
 
 # Processing mobileDeviceBranding ----
 tr$mobileDeviceBranding <- as.factor(tr$mobileDeviceBranding)
-tr$mobileDeviceBranding <- NULL
 
 # Processing mobileDeviceModel ----
 tr$mobileDeviceModel <- as.factor(tr$mobileDeviceModel)
-tr$mobileDeviceModel <- NULL
 
 # Processing mobileInputSelector ----
 tr$mobileInputSelector <- as.factor(tr$mobileInputSelector)
-tr$mobileInputSelector <- NULL
 
 # Processing mobileDeviceInfo ----
 tr$mobileDeviceInfo <- as.factor(tr$mobileDeviceInfo)
-tr$mobileDeviceInfo <- NULL
 
 # Processing mobileDeviceMarketingName ----
 tr$mobileDeviceMarketingName <- as.factor(tr$mobileDeviceMarketingName)
-tr$mobileDeviceMarketingName <- NULL
 
 # Processing flashVersion ----
 tr$flashVersion <- as.factor(tr$flashVersion)
-tr$flashVersion <- NULL
 
 # Processing language ----
 tr$language <- as.factor(tr$language)
-tr$language <- NULL
 
 # Processing screen colors ----
 tr$screenColors <- as.factor(tr$screenColors)
-tr$screenColors <- NULL
 
 # Processing screen resolution ----
 tr$screenResolution <- as.factor(tr$screenResolution)
-tr$screenResolution <- NULL
 
 # Processing deviceCategory ----
 tr$deviceCategory <- as.factor(tr$deviceCategory)
@@ -149,55 +135,44 @@ continent_replace <- function(x, sub_list){
 }
 tr$subContinent <- apply(tr[,c("continent", "subContinent")],1,continent_replace, sub_list = sub_list)
 tr$subContinent <- as.factor(tr$subContinent)
-tr$continent <- NULL
 
 # Processing country ----
 #x <- data.frame(table(tr$country))
 #x <- x[order(x$Freq),]
 tr$country <- as.factor(tr$country)
-tr$country <- NULL
 
 # Processing region ----
 #x <- data.frame(table(tr$region))
 #x <- x[order(x$Freq),]
 tr$region <- as.factor(tr$region)
-tr$region <- NULL
 
 # Processing metro ----
 #x <- data.frame(table(tr$metro))
 #x <- x[order(x$Freq),]
 tr$metro <- as.factor(tr$metro)
-tr$metro <- NULL
 
 # Processing city ----
 #x <- data.frame(table(tr$city))
 #x <- x[order(x$Freq),]
 tr$city <- as.factor(tr$city)
-tr$city <- NULL
 
 # Processing cityId ----
 tr$cityId <- as.factor(tr$cityId)
-tr$cityId <- NULL
 
 # Processing latitude ----
 tr$latitude <- as.integer(tr$latitude)
-tr$latitude <- NULL
 
 # Processing longitude ----
 tr$longitude <- as.integer(tr$longitude)
-tr$longitude <- NULL
 
 # Processing networkLocation ----
 tr$networkLocation <- as.factor(tr$networkLocation)
-tr$networkLocation <- NULL
 
 # Processing campaign ----
 tr$campaign <- as.factor(tr$campaign)
-tr$campaign <- NULL
 
 # Processing source ----
 tr$source <- as.factor(tr$source)
-tr$source <- NULL
 
 # Processing medium ----
 #x <- data.frame(table(tr$medium))
@@ -209,50 +184,39 @@ tr$medium <- as.factor(tr$medium)
 #x <- data.frame(table(tr$medium))
 #x <- x[order(x$Freq),]
 tr$keyword <- as.factor(tr$keyword)
-tr$keyword <- NULL
 
 # Processing isTrueDirect ----
-tr$isTrueDirect <- as.integer(1*tr$isTrueDirect)
+tr$isTrueDirect <- as.integer(1*!is.na(tr$isTrueDirect))
 
 # Processing referralPath ----
 tr$referralPath <- as.factor(tr$referralPath)
-tr$referralPath <- NULL
 
 # Processing adContent ----
 tr$adContent <- as.factor(tr$adContent)
-tr$adContent <- NULL
 
 # Processing campaignCode ----
 tr$campaignCode <- as.factor(tr$campaignCode)
-tr$campaignCode <- NULL
 
 # Processing adwordsClickInfo.criteriaParameters ----
 tr$adwordsClickInfo.criteriaParameters <- as.factor(tr$adwordsClickInfo.criteriaParameters)
-tr$adwordsClickInfo.criteriaParameters <- NULL
 
 # Processing adwordsClickInfo.page ----
 tr$adwordsClickInfo.page <- as.factor(tr$adwordsClickInfo.page)
-tr$adwordsClickInfo.page <- NULL
 
 # Processing adwordsClickInfo.slot ----
 tr$adwordsClickInfo.slot <- as.factor(tr$adwordsClickInfo.slot)
-tr$adwordsClickInfo.slot <- NULL
 
 # Processing adwordsClickInfo.gclId ----
 tr$adwordsClickInfo.gclId <- as.factor(tr$adwordsClickInfo.gclId)
-tr$adwordsClickInfo.gclId <- NULL
 
 # Processing adwordsClickInfo.adNetworkType ----
 tr$adwordsClickInfo.adNetworkType <- as.factor(tr$adwordsClickInfo.adNetworkType)
-tr$adwordsClickInfo.adNetworkType <- NULL
 
 # Processing adwordsClickInfo.isVideoAd ----
 tr$adwordsClickInfo.isVideoAd <- as.factor(tr$adwordsClickInfo.isVideoAd)
-tr$adwordsClickInfo.isVideoAd <- NULL
 
 # Processing visits ----
 tr$visits <- as.integer(tr$visits)
-tr$visits <- NULL
 
 # Processing hits ----
 tr$hits <- as.integer(tr$hits)
@@ -262,13 +226,50 @@ tr$pageviews <- as.integer(tr$pageviews)
 
 # Processing bounces
 tr$bounces <- as.integer(tr$bounces)
-tr$bounces <- NULL
 
 # Processing newvisits
 tr$newVisits <- as.integer(tr$newVisits)
-tr$newVisits <- NULL
 
 # Processing transactionRevenue - Only required in Training Data set ----
 tr$transactionRevenue <- as.double(tr$transactionRevenue)
 tr$transactionRevenue <- ifelse(is.na(tr$transactionRevenue),0,tr$transactionRevenue)
 
+# Columns to be removed ----
+tr$browserVersion <- NULL
+tr$browserSize <- NULL
+tr$socialEngagementType <- NULL
+tr$operatingSystemVersion <- NULL
+tr$isMobile <- NULL
+tr$mobileDeviceBranding <- NULL
+tr$mobileDeviceModel <- NULL
+tr$mobileInputSelector <- NULL
+tr$mobileDeviceInfo <- NULL
+tr$mobileDeviceMarketingName <- NULL
+tr$flashVersion <- NULL
+tr$language <- NULL
+tr$screenColors <- NULL
+tr$screenResolution <- NULL
+tr$continent <- NULL
+tr$country <- NULL
+tr$region <- NULL
+tr$metro <- NULL
+tr$city <- NULL
+tr$cityId <- NULL
+tr$latitude <- NULL
+tr$longitude <- NULL
+tr$networkLocation <- NULL
+tr$campaign <- NULL
+tr$source <- NULL
+tr$keyword <- NULL
+tr$referralPath <- NULL
+tr$adContent <- NULL
+tr$campaignCode <- NULL
+tr$adwordsClickInfo.criteriaParameters <- NULL
+tr$adwordsClickInfo.page <- NULL
+tr$adwordsClickInfo.slot <- NULL
+tr$adwordsClickInfo.gclId <- NULL
+tr$adwordsClickInfo.adNetworkType <- NULL
+tr$adwordsClickInfo.isVideoAd <- NULL
+tr$visits <- NULL
+tr$bounces <- NULL
+tr$newVisits <- NULL
