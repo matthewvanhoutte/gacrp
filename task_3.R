@@ -10,7 +10,7 @@ duplicated_rows <- tr[duplicated(tr$sessionId),]
 duplicated_rows <- tr[tr$sessionId %in% duplicated_rows$sessionId,]
 
 # Grouping the training data ---- 
-test <- tr %>% group_by(sessionId)
+test <- duplicated_rows %>% group_by(sessionId)
 test <- test %>% summarise(channelGrouping = unique(channelGrouping),
                          date = min(date),
                          fullVisitorId = unique(fullVisitorId),

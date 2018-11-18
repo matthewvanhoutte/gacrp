@@ -38,55 +38,66 @@ hist_graph <- hist_names
 hist_names <- unlist(names(hist_names))
 filter_label <- c("Both", "No Transaction", "Transaction")
 
+scat_names <- lapply(tr, class)
+scat_names <- scat_names[scat_names == "integer"
+                         | scat_names == "factor"
+                         | scat_names == "numeric"]
+scat_graph <- scat_names
+scat_names <- unlist(names(scat_names))
 
 # Define UI for app ----
-ui <- fluidPage(
-  
-  # Title panel for shiny
+ui <- fluidPage(# Title panel for shiny
   titlePanel("Data Exploration"),
   tabsetPanel(
-    
     # App layout for Data tables ----
     tabPanel("Data",
              tabsetPanel(
                tabPanel("Train Data", dataTableOutput("tr")),
                tabPanel("Test Data", dataTableOutput("te"))
-             )
-    ),
+             )),
     
     # App layout for graphs ----
     tabPanel("Graphs",
              tabsetPanel(
                
                # Histograms ----
-               tabPanel(
-                 "Histograms",
-                 sidebarLayout(
-                   sidebarPanel(
-                     selectInput("hist_var", 
-                                 "Histogram Variable:",
-                                 hist_names),
-                     sliderInput("bin_num",
-                                 "Bin Number",
-                                 min = 1,
-                                 max = 200,
-                                 value = 30),
-                     radioButtons("filter",
-                                  "Filter by transactionRevenue",
-                                  choices = filter_label
-                     )
-                   ),
-                   mainPanel(
-                     plotOutput("hist"))
-                 )
-                 
-               ),
-               tabPanel("Scatter", plotOutput("scat"))
-             )
-    )
-  )
-)
-
+               tabPanel("Histograms",
+                        sidebarLayout(
+                          sidebarPanel(
+                            selectInput("hist_var",
+                                        "Histogram Variable:",
+                                        hist_names),
+                            sliderInput(
+                              "bin_num",
+                              "Bin Number",
+                              min = 1,
+                              max = 200,
+                              value = 30
+                            ),
+                            radioButtons("filter",
+                                         "Filter by transactionRevenue",
+                                         choices = filter_label)
+                          ),
+                          mainPanel(plotOutput("hist"))
+                        )),
+               
+               # Scatter ----
+               tabPanel("Scatter",
+                        sidebarLayout(
+                          sidebarPanel(
+                            selectInput("var_x",
+                                        "Variable X Axis",
+                                        scat_names),
+                            selectInput("var_y",
+                                        "Variable Y Axis",
+                                        scat_names),
+                            radioButtons("filter",
+                                         "Filter by transactionRevenue",
+                                         choices = filter_label)
+                          ),
+                          mainPanel(plotOutput("scat"))
+                        ))
+             ))))
 
 # Server Function ----
 server <- function(input, output, session){
@@ -96,7 +107,8 @@ server <- function(input, output, session){
   
   
   
-  #Produce Graphs of data ----
+# Produce Graphs of data ----
+  # Producing Histogram graphs ----
   output$hist <- renderPlot({
     if (hist_graph[[input$hist_var]] == "factor"){
       if (input$filter == "Both") {
@@ -116,6 +128,11 @@ server <- function(input, output, session){
       }
       
     }
+  })
+  
+  # Producing Scatter plots ----
+  output$scat <- renderPlot({
+    ggplot(tr) + geom_point(aes_string(input$var_x, input$var_y))
   })
   
 }
