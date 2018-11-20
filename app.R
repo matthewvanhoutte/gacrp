@@ -80,6 +80,8 @@ ui <- fluidPage(# Title panel for shiny
                             radioButtons("filter_hist",
                                          "Filter by transactionRevenue",
                                          choices = filter_label)
+                            # downloadButton("save_hist",
+                            #                "Save Histogram")
                           ),
                           mainPanel(plotOutput("hist"))
                         )),
@@ -263,6 +265,17 @@ server <- function(input, output, session){
       }
     }
   })
+  
+  
+  # Saving files ----
+  output$save_hist <- downloadHandler(
+    filename = function() {
+      paste(input$dataset, ".png", sep = "")
+    },
+    content = function(file) {
+      ggsave(filename, plot = output$hist, device = device)
+    }
+  )
   
 }
 
