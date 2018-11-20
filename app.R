@@ -77,12 +77,37 @@ ui <- fluidPage(# Title panel for shiny
                               max = 200,
                               value = 30
                             ),
-                            radioButtons("filter",
+                            radioButtons("filter_hist",
                                          "Filter by transactionRevenue",
                                          choices = filter_label)
                           ),
                           mainPanel(plotOutput("hist"))
                         )),
+               
+               # Density ----
+               tabPanel("Density",
+                        sidebarLayout(
+                          sidebarPanel(
+                            selectInput("dens_var",
+                                        "Density Variable:",
+                                        hist_names),
+                            sliderInput(
+                              "bin_num",
+                              "Bin Number",
+                              min = 1,
+                              max = 200,
+                              value = 30
+                            ),
+                            radioButtons("filter_dens",
+                                         "Filter by transactionRevenue",
+                                         choices = filter_label),
+                            checkboxInput("dens_col",
+                                          "Colour Plot?",
+                                          value = FALSE)
+                          ),
+                          mainPanel(plotOutput("dens"))
+                        )),
+               
                
                # Scatter ----
                tabPanel("Scatter",
@@ -97,9 +122,10 @@ ui <- fluidPage(# Title panel for shiny
                             checkboxInput("colour",
                                           "Colour Graph?",
                                           FALSE),
-                            selectInput("scat_col",
-                                        "Colour Transaction points",
-                                        scat_names),
+                            hidden(
+                              selectInput("scat_col",
+                                          "Colour Transaction points",
+                                          scat_names)),
                             radioButtons("filter",
                                          "Filter by transactionRevenue",
                                          choices = filter_label)
@@ -111,8 +137,12 @@ ui <- fluidPage(# Title panel for shiny
 # Server Function ----
 server <- function(input, output, session){
   
-  observeEvent(input$colour, {
-    show("scat_col")
+  observe({
+    if (input$colour) {
+      show("scat_col")
+    } else {
+      hide("scat_col")
+    }
   })
 
   #Produce Tables of data ----
@@ -122,20 +152,92 @@ server <- function(input, output, session){
   # Producing Histogram graphs ----
   output$hist <- renderPlot({
     if (hist_graph[[input$hist_var]] == "factor"){
-      if (input$filter == "Both") {
+      if (input$filter_hist == "Both") {
         ggplot(tr) + geom_histogram(aes_string(input$hist_var), stat = "count")
-      } else if (input$filter == "No Transaction") {
+      } else if (input$filter_hist == "No Transaction") {
         ggplot(tr[!tr$hasTransaction,]) + geom_histogram(aes_string(input$hist_var), stat = "count")
-      } else if (input$filter == "Transaction") {
+      } else if (input$filter_hist == "Transaction") {
         ggplot(tr[tr$hasTransaction,]) + geom_histogram(aes_string(input$hist_var), stat = "count")
       }
     } else {
-      if (input$filter == "Both") {
+      if (input$filter_hist == "Both") {
         ggplot(tr) + geom_histogram(aes_string(input$hist_var), bins = input$bin_num)
-      } else if (input$filter == "No Transaction") {
+      } else if (input$filter_hist == "No Transaction") {
         ggplot(tr[!tr$hasTransaction,]) + geom_histogram(aes_string(input$hist_var), bins = input$bin_num)
-      } else if (input$filter == "Transaction") {
+      } else if (input$filter_hist == "Transaction") {
         ggplot(tr[tr$hasTransaction,]) + geom_histogram(aes_string(input$hist_var), bins = input$bin_num)
+      }
+      
+    }
+  })
+  
+  # Producing Density graphs ----
+  output$dens <- renderPlot({
+    if (hist_graph[[input$dens_var]] == "factor"){
+      if (input$filter_dens == "Both") {
+        if (input$dens_col) {
+          ggplot() + 
+            geom_histogram(aes(tr[tr$hasTransaction==1,input$dens_var], 
+                               y = ..count../sum(..count..)), 
+                           stat = "count", 
+                           fill = "red",
+                           color = "red",
+                           alpha = 0.2) +
+            geom_histogram(aes(tr[tr$hasTransaction==0,input$dens_var], 
+                               y = ..count../sum(..count..)), 
+                           stat = "count", 
+                           fill = "blue",
+                           color = "blue", 
+                           alpha = 0.2) + 
+            ggtitle(paste(input$dens_var,":", "Transactions = Red, No Transactions = Blue"))
+        } else {
+          ggplot(tr) + 
+            geom_histogram(aes_string(input$dens_var), 
+                           stat = "count") +
+            ggtitle(input$dens_var)
+        }
+      } else if (input$filter_dens == "No Transaction") {
+        ggplot(tr[!tr$hasTransaction,]) + 
+          geom_histogram(aes_string(input$dens_var), 
+                         stat = "count") +
+          ggtitle(input$dens_var)
+      } else if (input$filter_dens == "Transaction") {
+        ggplot(tr[tr$hasTransaction,]) + 
+          geom_histogram(aes_string(input$dens_var), 
+                         stat = "count") +
+          ggtitle(input$dens_var)
+      }
+    } else {
+      if (input$filter_dens == "Both") {
+        if (input$dens_col) {
+          ggplot() + 
+            geom_histogram(aes(tr[tr$hasTransaction==1,input$dens_var], 
+                               y = ..count../sum(..count..)),
+                           fill = "red",
+                           color = "red",
+                           alpha = 0.2) +
+            geom_histogram(aes(tr[tr$hasTransaction==0,input$dens_var], 
+                               y = ..count../sum(..count..)), 
+                           fill = "blue",
+                           color = "blue", 
+                           alpha = 0.2) + 
+            ggtitle(paste(input$dens_var,":", "Transactions = Red, No Transactions = Blue"))
+        } else {
+          ggplot(tr) + 
+            geom_histogram(aes_string(input$dens_var), 
+                           stat = "count") +
+            ggtitle(input$dens_var)
+        }
+      } else if (input$filter_dens == "No Transaction") {
+        ggplot(tr[!tr$hasTransaction,]) + 
+          geom_histogram(aes_string(input$dens_var), 
+                         bins = input$bin_num) +
+          ggtitle(input$dens_var)
+      } else if (input$filter_dens == "Transaction") {
+        ggplot(tr[tr$hasTransaction,]) + 
+          geom_histogram(aes_string(input$dens_var), 
+                         bins = input$bin_num) +
+          ggtitle(input$dens_var)
       }
       
     }
@@ -145,7 +247,7 @@ server <- function(input, output, session){
   output$scat <- renderPlot({
     if (input$colour) {
       if (input$filter == "Both") {
-        ggplot(tr) + geom_point(aes_string(input$var_x, input$var_y), color = input$scat_col)
+        ggplot(tr) + geom_point(aes_string(input$var_x, input$var_y, color = input$scat_col))
       } else if (input$filter == "No Transaction") {
         ggplot(tr[!tr$hasTransaction,]) + geom_point(aes_string(input$var_x, input$var_y), color = input$scat_col)
       } else if (input$filter == "Transaction") {
@@ -166,3 +268,4 @@ server <- function(input, output, session){
 
 # Run the shiny app ----
 shinyApp(ui = ui, server = server)
+
