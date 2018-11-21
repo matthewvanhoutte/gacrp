@@ -8,7 +8,7 @@ library(data.table)
 setwd("C://Users//user1//Documents//Kaggle")
 tr_name <- "tr.csv"
 #tr_name <- "~/OneDrive/Kaggle Comp/tr.csv"
-tr <- fread(file = tr_name, stringsAsFactors = FALSE, data.table =  FALSE)
+tr <- fread(file = tr_name, stringsAsFactors = FALSE, data.table =  FALSE, na.strings = "")
 print(colnames(tr))
 
 # functions ----
@@ -58,7 +58,7 @@ tr$visitNumber <- as.integer(tr$visitNumber)
 # Processing visitStartTime ----
 tr$visitStartTime <- as.POSIXct(tr$visitStartTime, origin = "1970-01-01", tz = "America/Los_Angeles")
 tr$visitTimeBin12 <- binning(tr$visitStartTime, 12)
-tr$visitTimeBin12 <- as.factor(tr$visitTimeBin12)
+tr$visitTimeBin12 <- factor(tr$visitTimeBin12, ordered = TRUE)
 
 # Processing browser ----
 #x <- data.frame(table(tr$browser))
@@ -235,7 +235,7 @@ tr$transactionRevenue <- as.double(tr$transactionRevenue)
 tr$transactionRevenue <- ifelse(is.na(tr$transactionRevenue),0,tr$transactionRevenue)
 
 # Columns to be removed ----
-tr$browserVersion <- NULL
+#tr$browserVersion <- NULL
 tr$browserSize <- NULL
 tr$socialEngagementType <- NULL
 tr$operatingSystemVersion <- NULL
@@ -249,7 +249,7 @@ tr$flashVersion <- NULL
 tr$language <- NULL
 tr$screenColors <- NULL
 tr$screenResolution <- NULL
-tr$continent <- NULL
+#tr$continent <- NULL
 tr$country <- NULL
 tr$region <- NULL
 tr$metro <- NULL
@@ -258,18 +258,18 @@ tr$cityId <- NULL
 tr$latitude <- NULL
 tr$longitude <- NULL
 tr$networkLocation <- NULL
-tr$campaign <- NULL
+#tr$campaign <- NULL
 tr$source <- NULL
 tr$keyword <- NULL
 tr$referralPath <- NULL
 tr$adContent <- NULL
-tr$campaignCode <- NULL
+#tr$campaignCode <- NULL
 tr$adwordsClickInfo.criteriaParameters <- NULL
-tr$adwordsClickInfo.page <- NULL
-tr$adwordsClickInfo.slot <- NULL
+#tr$adwordsClickInfo.page <- NULL
+#tr$adwordsClickInfo.slot <- NULL
 tr$adwordsClickInfo.gclId <- NULL
-tr$adwordsClickInfo.adNetworkType <- NULL
-tr$adwordsClickInfo.isVideoAd <- NULL
-tr$visits <- NULL
-tr$bounces <- NULL
-tr$newVisits <- NULL
+#tr$adwordsClickInfo.adNetworkType <- NULL
+#tr$adwordsClickInfo.isVideoAd <- NULL
+#tr$visits <- NULL
+#tr$bounces <- NULL
+#tr$newVisits <- NULL
