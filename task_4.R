@@ -37,10 +37,11 @@ tr$channelGrouping <- as.factor(tr$channelGrouping)
 # Days
 tr$day <- as.integer(substr(tr$date,7,8))
 tr$day <- cut(x = tr$day, breaks = c(1,10,20,31), labels = (1:3))
+tr$day <- unclass(tr$day)
 # Months
-tr$month <- as.factor(substr(tr$date,5,6))
+tr$month <- as.integer(substr(tr$date,5,6))
 # Years
-tr$year <- as.factor(substr(tr$date,1,4))
+tr$year <- as.integer(substr(tr$date,1,4))
 
 # Processing "fullVisitorId" and "visitId" ----
 # This column is to be obtained from the sessionId as it has not been stored correctly in the csv
