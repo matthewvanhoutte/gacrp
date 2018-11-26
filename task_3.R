@@ -24,12 +24,13 @@ test <- test %>% summarise(channelGrouping = unique(channelGrouping),
                          continent = unique(continent)[1],
                          subContinent = unique(subContinent)[1],
                          networkDomain = unique(networkDomain)[1],
+                         campaign = unique(campaign)[1],
                          medium = unique(medium)[1],
                          isTrueDirect = unique(isTrueDirect)[1],
-                         campaignCode = unqiue(campaignCode)[1],
-                         adwordsClickInfo.page = unqiue(adwordsClickInfo.page)[1],
-                         adwordsClickInfo.slot = unqiue(adwordsClickInfo.slot)[1],
-                         adwordsClickInfo.adNetworkType = unqiue(adwordsClickInfo.adNetworkType)[1],
+                         campaignCode = unique(campaignCode)[1],
+                         adwordsClickInfo.page = unique(adwordsClickInfo.page)[1],
+                         adwordsClickInfo.slot = unique(adwordsClickInfo.slot)[1],
+                         adwordsClickInfo.adNetworkType = unique(adwordsClickInfo.adNetworkType)[1],
                          adwordsClickInfo.isVideoAd = unique(adwordsClickInfo.isVideoAd)[1],
                          visits = max(visits),
                          hits = sum(hits) - 1,
@@ -42,10 +43,10 @@ test <- test %>% summarise(channelGrouping = unique(channelGrouping),
                          year = min(year),
                          fullVisitId = unique(fullVisitId)[1],
                          visitTimeBin12 = max(visitTimeBin12))
-
+test <- as.data.frame(test)
 # Remove from training set ----
 id_remove <- unique(duplicated_rows$sessionId)
 id_remove <- tr$sessionId %in% id_remove
 tr <- tr[!id_remove,]
 # Add into summary into to training set ----
-tr <- c(tr,test)
+tr <- rbind(tr,test)
