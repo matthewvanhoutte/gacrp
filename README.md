@@ -31,7 +31,7 @@ For each *fullVisitorId* in the test set, you must predict the natural log of th
 ### Timeline:
 * November 8, 2018 - Entry deadline. You must accept the competition rules before this date in order to compete.
 * November 8, 2018 - Team Merger deadline. This is the last day participants may join or merge teams.
-* November 15, 2018 - Final submission deadline.
+* November 30, 2018 - Final submission deadline.
 
 All deadlines are at 11:59 PM UTC on the corresponding day unless otherwise noted. The competition organizers reserve the right to update the contest timeline if they deem it necessary.
 
