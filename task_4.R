@@ -11,6 +11,14 @@ tr_name <- "tr.csv"
 tr <- fread(file = tr_name, stringsAsFactors = FALSE, data.table =  FALSE, na.strings = "")
 print(colnames(tr))
 
+# import the country file to transform the time columns and replace with the standard country names ----
+time_diff = fread(file = "countrytime1.csv", stringsAsFactors = FALSE, data.table =  FALSE)
+uc <- sort(unique(tr$country))
+key <- c(uc[1], uc[2], uc[36], uc[54], uc[165], uc[169], uc[186])
+#key <-  c("(not set)", "Ã…land Islands", "CÃ´te dâ€™Ivoire", "CuraÃ§ao","RÃ©union", "SÃ£o TomÃ© & PrÃncipe", "St. BarthÃ©lemy")
+value <- c("other", "Aland Islands (Finland)", "Cote d'Ivoire", "Curacao", "Reunion", "Sao Tome and Principe", "St. Barthelemy")
+tr$country <- sapply(tr$country, function(x) ifelse(x %in% key, value[match(x, key)], x))
+
 # functions ----
 replace <- function(x, col_list, str_replace){
   if (x %in% col_list){
@@ -58,6 +66,8 @@ tr$visitNumber <- as.integer(tr$visitNumber)
 
 # Processing visitStartTime ----
 tr$visitStartTime <- as.POSIXct(tr$visitStartTime, origin = "1970-01-01", tz = "America/Los_Angeles")
+tr$visitStartTimeAdd <- sapply(tr$country, function(x) time_diff$seconds[match(x, time_diff$Country)])
+tr$visitStartTime <- tr$visitStartTime + tr$visitStartTimeAdd
 tr$visitTimeBin12 <- binning(tr$visitStartTime, 12)
 tr$visitTimeBin12 <- factor(tr$visitTimeBin12, ordered = TRUE)
 
