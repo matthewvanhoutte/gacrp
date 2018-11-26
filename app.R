@@ -34,9 +34,10 @@ tr$hasTransaction <- tr$transactionRevenue>0
 
 #Define variables required in the UI ----
 hist_names <- lapply(tr, class)
-hist_names <- hist_names[hist_names == "integer"
-                         | hist_names == "factor"
-                         | hist_names == "numeric"]
+hist_names <- hist_names[hist_names[1] == "integer"
+                         | hist_names[1] == "factor"
+                         | hist_names[1] == "ordered"
+                         | hist_names[1] == "numeric"]
 hist_graph <- hist_names
 hist_names <- unlist(names(hist_names))
 filter_label <- c("Both", "No Transaction", "Transaction")
@@ -177,7 +178,7 @@ server <- function(input, output, session){
   
   # Producing Density graphs ----
   output$dens <- renderPlot({
-    if (hist_graph[[input$dens_var]] == "factor"){
+    if (hist_graph[[input$dens_var]] == "factor" | hist_graph[[input$dens_var]] == "ordered"){
       if (input$filter_dens == "Both") {
         if (input$dens_col) {
           ggplot() + 
