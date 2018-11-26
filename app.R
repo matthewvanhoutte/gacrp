@@ -25,6 +25,8 @@ library(ggplot2)
 # use Task 4 code which does the data cleansing
 # tr$date <- as.Date(as.character(tr$date), "%Y%m%d")
 # te$date <- as.Date(as.character(te$date), "%Y%m%d")
+# 
+tr$visitTimeBin12 <- as.factor(tr$visitTimeBin12)
 
 # Adding a True False filter enabling the choice between
 # TransactionRevenue split and no split
