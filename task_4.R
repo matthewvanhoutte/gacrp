@@ -8,11 +8,13 @@ library(data.table)
 setwd("C://Users//user1//Documents//Kaggle")
 tr_name <- "tr.csv"
 #tr_name <- "~/OneDrive/Kaggle Comp/tr.csv"
+country_name = "countrytime1.csv"
+#country_name = "~/OneDrive/Kaggle Comp/countrytime1.csv"
 tr <- fread(file = tr_name, stringsAsFactors = FALSE, data.table =  FALSE, na.strings = "")
 print(colnames(tr))
 
 # import the country file to transform the time columns and replace with the standard country names ----
-time_diff = fread(file = "countrytime1.csv", stringsAsFactors = FALSE, data.table =  FALSE)
+time_diff = fread(file = country_name, stringsAsFactors = FALSE, data.table =  FALSE)
 uc <- sort(unique(tr$country))
 key <- c(uc[1], uc[2], uc[36], uc[54], uc[165], uc[169], uc[186])
 #key <-  c("(not set)", "Ã…land Islands", "CÃ´te dâ€™Ivoire", "CuraÃ§ao","RÃ©union", "SÃ£o TomÃ© & PrÃncipe", "St. BarthÃ©lemy")
