@@ -2,7 +2,7 @@
 #Last Modified: 11/10/18
 
 #Required Libraries
-library(data.table)
+library(readr)
 library(jsonlite)
 library(tidyverse)
 
@@ -14,27 +14,35 @@ library(tidyverse)
 setwd("C://Users//user1//Documents//Kaggle")
 
 #Import the data
-#tr_name <- "~/Documents/Kaggle Comp/train.csv"
+#tr_name <- "~/Documents/Kaggle Comp/split/splitaa.csv"
 #te_name <- "~/Documents/Kaggle Comp/test.csv"
 tr_name <- "train.csv"
 te_name <- "test.csv"
-tr <- read.csv(tr_name)
-te <- read.csv(te_name)
+tr <- read_csv(tr_name)
+te <- read_csv(te_name)
 
 # Functions ---------------------------------------------------------------
 
+# Remove [] from the data before JSON to String conversion
+# Do this prior to parsing
+tr$customDimensions <- substr(tr$customDimensions,2,nchar(tr$customDimensions)-1)
+tr$hits <- substr(tr$hits,2,nchar(tr$hits)-1)
+
+
+
 #Conversion from JSON to String
-flatten_json <- . %>% 
+flatten_json <- . %>%
   str_c(., collapse = ",") %>% 
   str_c("[", ., "]") %>% 
   fromJSON(flatten = T)
 
 parse <- . %>% 
   bind_cols(flatten_json(.$device)) %>%
-  bind_cols(flatten_json(.$geoNetwork)) %>% 
-  bind_cols(flatten_json(.$trafficSource)) %>% 
-  bind_cols(flatten_json(.$totals)) %>% 
-  select(-device, -geoNetwork, -trafficSource, -totals)
+  bind_cols(flatten_json(.$customDimensions)) %>%
+  # bind_cols(flatten_json(.$geoNetwork)) %>% 
+  # bind_cols(flatten_json(.$trafficSource)) %>% 
+  # bind_cols(flatten_json(.$totals)) %>% 
+  select(-device)#, -geoNetwork, -trafficSource, -totals)
 
 is_na_val <- function(x) x %in% c("not available in demo dataset", "(not set)", 
                                   "unknown.unknown", "(not provided)")
