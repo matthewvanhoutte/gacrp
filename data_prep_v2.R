@@ -33,16 +33,25 @@ tr$hits <- substr(tr$hits,2,nchar(tr$hits)-1)
 #Conversion from JSON to String
 flatten_json <- . %>%
   str_c(., collapse = ",") %>% 
-  str_c("[", ., "]") %>% 
+  str_c("[", ., "]") %>%
+  fromJSON(flatten = T)
+
+# Converstion from JSON to String but for customDimensions, and hits
+flatten_json_2 <- . %>%
+  substr(., 2, nchar(.)-1) %>%
+  gsub("\'",'\"',.) %>%
+  str_c(., collapse = ",") %>%
+  str_c("[",.,"]") %>%
   fromJSON(flatten = T)
 
 parse <- . %>% 
   bind_cols(flatten_json(.$device)) %>%
-  bind_cols(flatten_json(.$customDimensions)) %>%
-  # bind_cols(flatten_json(.$geoNetwork)) %>% 
-  # bind_cols(flatten_json(.$trafficSource)) %>% 
-  # bind_cols(flatten_json(.$totals)) %>% 
-  select(-device)#, -geoNetwork, -trafficSource, -totals)
+  bind_cols(flatten_json_2(.$customDimensions)) %>%
+  bind_cols(flatten_json(.$geoNetwork)) %>%
+  bind_cols(flatten_json_2(.$hits)) %>%
+  bind_cols(flatten_json(.$trafficSource)) %>%
+  bind_cols(flatten_json(.$totals)) %>%
+  select(-device, -geoNetwork, -trafficSource, -totals)
 
 is_na_val <- function(x) x %in% c("not available in demo dataset", "(not set)", 
                                   "unknown.unknown", "(not provided)")
