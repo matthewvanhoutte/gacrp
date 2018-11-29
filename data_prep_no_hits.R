@@ -49,12 +49,12 @@ flatten_json_3 <- . %>%
   # gsub("(\\[\\{)", "{",.) %>%
   # substr(., 2, nchar(.)-1) %>%
   gsub("\'\'", "",.)
-  # gsub("(?<!')'(?!')",'\"',., perl = T) %>%
-  # gsub("True",'"TRUE"',.) %>%
-  # gsub("False", '"FALSE"',.) %>%
-  # # str_c(., collapse = ",") %>%
-  # # str_c("[",.,"]") %>%
-  # jsonlite::fromJSON()
+# gsub("(?<!')'(?!')",'\"',., perl = T) %>%
+# gsub("True",'"TRUE"',.) %>%
+# gsub("False", '"FALSE"',.) %>%
+# # str_c(., collapse = ",") %>%
+# # str_c("[",.,"]") %>%
+# jsonlite::fromJSON()
 
 parse <- . %>% 
   bind_cols(flatten_json(.$device)) %>%
