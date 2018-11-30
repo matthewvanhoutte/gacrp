@@ -23,47 +23,38 @@ te <- read_csv(te_name)
 
 # Functions ---------------------------------------------------------------
 
-# Remove [] from the data before JSON to String conversion
-# Do this prior to parsing
-tr$customDimensions <- substr(tr$customDimensions,2,nchar(tr$customDimensions)-1)
-tr$hits <- substr(tr$hits,2,nchar(tr$hits)-1)
-
-
-
 #Conversion from JSON to String
 flatten_json <- . %>%
   str_c(., collapse = ",") %>% 
   str_c("[", ., "]") %>%
-  fromJSON(flatten = T)
+  jsonlite::fromJSON(flatten = T)
 
 # Conversion from JSON to String but for customDimensions
 flatten_json_2 <- . %>%
-  substr(., 2, nchar(.)-1) %>%
+  # substr(., 2, nchar(.)-1) %>%
   gsub("\'",'\"',.) %>%
+  gsub("\\[\\{","{",.) %>%
+  gsub("\\}\\]", "}",.) %>%
+  gsub("\\[\\]", "{\"index\": null, \"value\": null}",.) %>%
   str_c(., collapse = ",") %>%
   str_c("[",.,"]") %>%
-  fromJSON(flatten = T)
+  jsonlite::fromJSON()
 
-# Conversion from JSON to String for hits
+# Conversion from JSON to String trafficsource
 flatten_json_3 <- . %>%
-  # gsub("(\\[\\{)", "{",.) %>%
-  # substr(., 2, nchar(.)-1) %>%
-  gsub("\'\'", "",.)
-# gsub("(?<!')'(?!')",'\"',., perl = T) %>%
-# gsub("True",'"TRUE"',.) %>%
-# gsub("False", '"FALSE"',.) %>%
-# # str_c(., collapse = ",") %>%
-# # str_c("[",.,"]") %>%
-# jsonlite::fromJSON()
+  str_c(., collapse = ",") %>% 
+  str_c("[", ., "]")
+  # jsonlite::fromJSON(flatten = T)
 
+# Parsing the data
 parse <- . %>% 
   bind_cols(flatten_json(.$device)) %>%
   bind_cols(flatten_json_2(.$customDimensions)) %>%
   bind_cols(flatten_json(.$geoNetwork)) %>%
-  bind_cols(flatten_json_3(.$hits)) %>%
   bind_cols(flatten_json(.$trafficSource)) %>%
   bind_cols(flatten_json(.$totals)) %>%
-  select(-device, -geoNetwork, -trafficSource, -totals)
+  select(-device, - customDimensions, -geoNetwork, -trafficSource, -totals)
+
 
 is_na_val <- function(x) x %in% c("not available in demo dataset", "(not set)", 
                                   "unknown.unknown", "(not provided)")
@@ -73,6 +64,11 @@ has_many_values <- function(x) n_distinct(x) > 1
 
 
 # Run Time ----------------------------------------------------------------
+
+tr$geoNetwork[is.na(tr$geoNetwork)] <- "null"
+tr$trafficSource[is.na(tr$trafficSource)] <- "null"
+tr$totals[is.na(tr$totals)] <- "null"
+
 
 #Parsing data
 tr <- parse(tr)
