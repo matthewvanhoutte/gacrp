@@ -5,6 +5,7 @@
 library(readr)
 library(jsonlite)
 library(tidyverse)
+library(data.table)
 
 
 # Initialise --------------------------------------------------------------
@@ -14,12 +15,9 @@ library(tidyverse)
 setwd("C://Users//user1//Documents//Kaggle")
 
 #Import the data
-#tr_name <- "~/Documents/Kaggle Comp/split/splitaa.csv"
-#te_name <- "~/Documents/Kaggle Comp/test.csv"
-tr_name <- "train.csv"
-te_name <- "test.csv"
-tr <- read_csv(tr_name)
-te <- read_csv(te_name)
+tr_name <- "test_v2-1.csv"
+tr <- read_csv(paste("~/Downloads/data/",tr_name, sep = ""))
+tr$hits <- NULL
 
 # Functions ---------------------------------------------------------------
 
@@ -61,8 +59,6 @@ is_na_val <- function(x) x %in% c("not available in demo dataset", "(not set)",
 
 has_many_values <- function(x) n_distinct(x) > 1
 
-
-
 # Run Time ----------------------------------------------------------------
 
 tr$geoNetwork[is.na(tr$geoNetwork)] <- "null"
@@ -72,10 +68,8 @@ tr$totals[is.na(tr$totals)] <- "null"
 
 #Parsing data
 tr <- parse(tr)
-te <- parse(te)
-
 tr <- as.data.frame(tr)
-te <- as.data.frame(te)
-
+tr2 <- tr
+fwrite(tr, file = paste("~/Documents/Kaggle Comp/processed/",tr_name, sep = ""))
 
 
